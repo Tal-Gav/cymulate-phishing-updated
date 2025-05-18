@@ -1,0 +1,12 @@
+services:
+  mongo-cym:
+    image: mongo
+    restart: always
+    container_name: mongo-cym
+    ports:
+      - ${MONGO_DB_PORT}:${MONGO_DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+    volumes:
+      - ./container-volumes:/data/db/
