@@ -57,7 +57,6 @@ export const sendAttemptThunk = createAsyncThunk(
     try {
       const response = await sendAttempt(targetEmail, id);
       toast.success("Email sent to the target");
-
       return response;
     } catch (error: any) {
       toast.error("Error sending email");

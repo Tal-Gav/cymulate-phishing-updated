@@ -21,21 +21,24 @@ export class TargetService {
     return await this.model.find({ userId: id }).exec();
   }
   async create(createTargetDto: CreateTargetDto): Promise<Target> {
-    const newTarget = await new this.model({
-      userId: createTargetDto.id,
-      email: createTargetDto.email,
-      createdAt: new Date(),
-    }).save();
+    try {
+      await sendEmail({
+        to: createTargetDto.email,
+        subject: "Free Bitcoin!! Get it now!",
+        text: "Click the link below to get free bitcoin!",
+        html: `<p>Click the link below to get free bitcoin!</p>
+             <p><a href="http://localhost:5173/free-bitcoin/${createTargetDto.id}">Get Free Bitcoin</a></p>`,
+      });
 
-    await sendEmail({
-      to: newTarget.email,
-      subject: "Free Bitcoin!! Get it now!",
-      text: "Click the link below to get free bitcoin!",
-      html: `<p>Click the link below to get free bitcoin!</p>
-             <p><a href="http://localhost:5173/free-bitcoin/${newTarget.id}">Get Free Bitcoin</a></p>`,
-    });
-
-    return newTarget;
+      const newTarget = await new this.model({
+        userId: createTargetDto.id,
+        email: createTargetDto.email,
+        createdAt: new Date(),
+      }).save();
+      return newTarget;
+    } catch (error) {
+      throw new Error(`Failed to create target: ${error}`);
+    }
   }
   async updatePhisingSuccess(id: string): Promise<Target> {
     return await this.model
