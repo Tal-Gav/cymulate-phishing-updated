@@ -51,11 +51,11 @@ export const deleteAttemptThunk = createAsyncThunk(
 export const sendAttemptThunk = createAsyncThunk(
   "attempt/send",
   async (
-    { targetEmail, id }: { targetEmail: string; id: string },
+    { targetEmail, userId }: { targetEmail: string; userId: string },
     thunkAPI
   ) => {
     try {
-      const response = await sendAttempt(targetEmail, id);
+      const response = await sendAttempt(targetEmail, userId);
       toast.success("Email sent to the target");
       return response;
     } catch (error: any) {

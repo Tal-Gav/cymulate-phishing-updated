@@ -1,8 +1,8 @@
-import * as nodemailer from 'nodemailer';
+import * as nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_SMTP_HOST,
-  port: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
+  port: parseInt(process.env.EMAIL_SMTP_PORT || "587"),
   secure: false,
   auth: {
     user: process.env.EMAIL_USER,
@@ -21,9 +21,9 @@ export const sendEmail = async ({ to, subject, text, html }) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    return info;
+    return { info, error: false };
   } catch (error) {
-    console.error('Error sending email:', error);
-    throw error;
+    console.error("Error sending email:", error);
+    return { error: true, msg: error };
   }
 };

@@ -19,7 +19,6 @@ export const loginUser = async (user: UserDraft) => {
 
 export const logoutUser = async () => {
   const response = await axiosPrivate.post(`${MANAGE_URL}/logout`);
-  console.log(response);
   return response.data;
 };
 

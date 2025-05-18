@@ -29,7 +29,7 @@ const Attempts = () => {
     dispatch(getAttemptsThunk(user.id));
   };
   const handleSendAttempt = () => {
-    dispatch(sendAttemptThunk({ targetEmail, id: user.id }));
+    dispatch(sendAttemptThunk({ targetEmail, userId: user.id }));
   };
   const handleLogout = async () => {
     const result = await dispatch(logoutUserThunk());

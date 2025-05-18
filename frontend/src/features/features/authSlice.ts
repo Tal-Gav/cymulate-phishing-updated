@@ -56,7 +56,6 @@ export const loginUserThunk = createAsyncThunk(
 
       return response;
     } catch (error: any) {
-      console.log(error.response);
       toast.error("Login error");
       return thunkAPI.rejectWithValue(error.response?.data || "Error");
     }

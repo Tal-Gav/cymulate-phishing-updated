@@ -5,10 +5,10 @@ export const getAttempts = async (id: string) => {
   return response.data;
 };
 
-export const sendAttempt = async (email: string, id: string) => {
+export const sendAttempt = async (email: string, userId: string) => {
   const response = await axiosPublic.post(`${SIMULATE_URL}/send`, {
     email,
-    id,
+    userId,
   });
   return response.data;
 };

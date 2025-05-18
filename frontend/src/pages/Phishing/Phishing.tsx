@@ -27,6 +27,7 @@ const Phishing = () => {
       alignItems={"center"}
       flexDirection={"column"}
       p={2}
+      gap={20}
     >
       <Typography
         fontFamily={"Segoe UI"}
@@ -37,6 +38,7 @@ const Phishing = () => {
       >
         Free bitcoin!
       </Typography>
+      <img src="/freeBTC.jpg" width={300} height={300}></img>
     </Box>
   );
 };

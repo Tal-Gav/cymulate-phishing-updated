@@ -22,19 +22,25 @@ export class TargetService {
   }
   async create(createTargetDto: CreateTargetDto): Promise<Target> {
     try {
-      await sendEmail({
-        to: createTargetDto.email,
-        subject: "Free Bitcoin!! Get it now!",
-        text: "Click the link below to get free bitcoin!",
-        html: `<p>Click the link below to get free bitcoin!</p>
-             <p><a href="http://localhost:5173/free-bitcoin/${createTargetDto.id}">Get Free Bitcoin</a></p>`,
-      });
-
       const newTarget = await new this.model({
-        userId: createTargetDto.id,
+        userId: createTargetDto.userId,
         email: createTargetDto.email,
         createdAt: new Date(),
       }).save();
+
+      const result = await sendEmail({
+        to: newTarget.email,
+        subject: "Free Bitcoin!! Get it now!",
+        text: "Click the link below to get free bitcoin!",
+        html: `<p>Click the link below to get free bitcoin!</p>
+             <p><a href="http://localhost:5173/free-bitcoin/${newTarget._id}">Get Free Bitcoin</a></p>`,
+      });
+
+      if (result.error) {
+        await this.model.findByIdAndDelete(newTarget._id);
+        throw new Error(result.msg);
+      }
+
       return newTarget;
     } catch (error) {
       throw new Error(`Failed to create target: ${error}`);
