@@ -1,7 +1,10 @@
 import {
   Box,
   Button,
+  FormControlLabel,
+  FormGroup,
   IconButton,
+  Switch,
   TextField,
   Typography,
   useTheme,
@@ -15,14 +18,16 @@ import {
 import { useEffect, useState } from "react";
 import { logoutUserThunk } from "../../features/features/authSlice";
 import { useNavigate } from "react-router-dom";
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import TableView from "./TableView";
+import SquareView from "./SquareView";
 
 const Attempts = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { attempts, loading } = useAppSelector((state) => state.attempt);
+
   const { user } = useAppSelector((state) => state.auth);
   const [targetEmail, setTargetEmail] = useState("");
+  const [isSquareView, setIsSquareView] = useState(false);
   const navigate = useNavigate();
 
   const getAttempts = async () => {
@@ -34,9 +39,6 @@ const Attempts = () => {
   const handleLogout = async () => {
     const result = await dispatch(logoutUserThunk());
     if (result.meta.requestStatus === "fulfilled") navigate("/");
-  };
-  const handleAttemptDelete = (id: string) => {
-    dispatch(deleteAttemptThunk(id));
   };
 
   useEffect(() => {
@@ -95,49 +97,27 @@ const Attempts = () => {
           send
         </Button>
       </Box>
-      {!loading && attempts.length > 0 && (
-        <Box
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          flexDirection={"column"}
-          p={2}
-          gap={2}
-        >
-          {attempts.map((attempt) => (
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"flex-start"}
-              flexDirection={"column"}
-              p={2}
-              key={attempt._id}
-              sx={{
-                border: "1px solid black",
-                borderRadius: "12px",
-              }}
-            >
-              <Typography>Target Case ID: {attempt._id}</Typography>
-              <Typography>Target Email: {attempt.email}</Typography>
-              <Typography>
-                Is Clicked URL: {attempt.isClickedUrl ? "Yes" : "No"}
-              </Typography>
-              <Typography>
-                Clicked URL At:{" "}
-                {attempt.clickedUrlTime
-                  ? new Date(attempt.clickedUrlTime).toLocaleString()
-                  : "-"}
-              </Typography>
-              <Typography>
-                Created At: {new Date(attempt.createdAt).toLocaleString()}
-              </Typography>
-              <IconButton onClick={() => handleAttemptDelete(attempt._id)}>
-                <DeleteForeverOutlinedIcon />
-              </IconButton>
-            </Box>
-          ))}
-        </Box>
-      )}
+      <Box
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        gap={2}
+      >
+        <Typography letterSpacing={2} color={theme.palette.primary.main}>
+          Table
+        </Typography>
+        <Switch
+          checked={isSquareView}
+          onClick={() => setIsSquareView((prev) => !prev)}
+          name="isSquareView"
+        />
+
+        <Typography letterSpacing={2} color={theme.palette.primary.main}>
+          Square
+        </Typography>
+      </Box>
+
+      {isSquareView ? <SquareView /> : <TableView />}
     </Box>
   );
 };
